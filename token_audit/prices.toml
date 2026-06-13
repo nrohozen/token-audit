@@ -1,0 +1,51 @@
+# Claude API Token Pricing Configuration
+# Prices are in USD per million tokens.
+# Update these values when Anthropic changes pricing.
+# Source: https://www.anthropic.com/pricing
+# Last updated: 2026-06-12
+#
+# To use a custom prices file, either:
+#   - Place your edited copy at ~/.config/token-audit/prices.toml
+#   - Pass --prices /path/to/your/prices.toml on the command line
+
+version = "1"
+
+[models.claude-opus-4-8]
+input_per_mtok     = 15.00
+output_per_mtok    = 75.00
+cache_write_per_mtok = 18.75
+cache_read_per_mtok  = 1.50
+
+[models.claude-sonnet-4-6]
+input_per_mtok     = 3.00
+output_per_mtok    = 15.00
+cache_write_per_mtok = 3.75
+cache_read_per_mtok  = 0.30
+
+[models.claude-haiku-4-5-20251001]
+input_per_mtok     = 0.80
+output_per_mtok    = 4.00
+cache_write_per_mtok = 1.00
+cache_read_per_mtok  = 0.08
+
+# Fable 5 pricing is not yet officially published; using Sonnet-equivalent as a placeholder.
+[models.claude-fable-5]
+input_per_mtok     = 3.00
+output_per_mtok    = 15.00
+cache_write_per_mtok = 3.75
+cache_read_per_mtok  = 0.30
+
+# Error responses use the <synthetic> model name and carry zero tokens — no cost.
+[models."<synthetic>"]
+input_per_mtok     = 0.00
+output_per_mtok    = 0.00
+cache_write_per_mtok = 0.00
+cache_read_per_mtok  = 0.00
+
+# Fallback applied to any model not listed above.
+# Set all values to 0.0 to suppress cost for unknown models.
+[unknown_model_fallback]
+input_per_mtok     = 3.00
+output_per_mtok    = 15.00
+cache_write_per_mtok = 3.75
+cache_read_per_mtok  = 0.30
