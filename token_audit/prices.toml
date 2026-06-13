@@ -2,7 +2,14 @@
 # Prices are in USD per million tokens.
 # Update these values when Anthropic changes pricing.
 # Source: https://www.anthropic.com/pricing
-# Last updated: 2026-06-12
+# Last updated: 2026-06-13
+#
+# cache_write_per_mtok uses the 5-minute cache-write rate (the default
+# ephemeral TTL). The 1-hour write rate is higher but isn't represented here,
+# since transcripts use the default 5m TTL.
+#
+# Aliases and dated full IDs are both listed for each model so costs match
+# regardless of which form a transcript records.
 #
 # To use a custom prices file, either:
 #   - Place your edited copy at ~/.config/token-audit/prices.toml
@@ -10,11 +17,80 @@
 
 version = "1"
 
+# --- Fable / Mythos tier: $10 / $50 ---
+
+[models.claude-fable-5]
+input_per_mtok     = 10.00
+output_per_mtok    = 50.00
+cache_write_per_mtok = 12.50
+cache_read_per_mtok  = 1.00
+
+# Mythos 5 — limited availability (Project Glasswing); same pricing as Fable 5.
+[models.claude-mythos-5]
+input_per_mtok     = 10.00
+output_per_mtok    = 50.00
+cache_write_per_mtok = 12.50
+cache_read_per_mtok  = 1.00
+
+# --- Opus 4.5–4.8: $5 / $25 ---
+
 [models.claude-opus-4-8]
+input_per_mtok     = 5.00
+output_per_mtok    = 25.00
+cache_write_per_mtok = 6.25
+cache_read_per_mtok  = 0.50
+
+[models.claude-opus-4-7]
+input_per_mtok     = 5.00
+output_per_mtok    = 25.00
+cache_write_per_mtok = 6.25
+cache_read_per_mtok  = 0.50
+
+[models.claude-opus-4-6]
+input_per_mtok     = 5.00
+output_per_mtok    = 25.00
+cache_write_per_mtok = 6.25
+cache_read_per_mtok  = 0.50
+
+[models.claude-opus-4-5]
+input_per_mtok     = 5.00
+output_per_mtok    = 25.00
+cache_write_per_mtok = 6.25
+cache_read_per_mtok  = 0.50
+
+[models.claude-opus-4-5-20251101]
+input_per_mtok     = 5.00
+output_per_mtok    = 25.00
+cache_write_per_mtok = 6.25
+cache_read_per_mtok  = 0.50
+
+# --- Opus 4 / 4.1 (deprecated): $15 / $75 ---
+
+[models.claude-opus-4-1]
 input_per_mtok     = 15.00
 output_per_mtok    = 75.00
 cache_write_per_mtok = 18.75
 cache_read_per_mtok  = 1.50
+
+[models.claude-opus-4-1-20250805]
+input_per_mtok     = 15.00
+output_per_mtok    = 75.00
+cache_write_per_mtok = 18.75
+cache_read_per_mtok  = 1.50
+
+[models.claude-opus-4-0]
+input_per_mtok     = 15.00
+output_per_mtok    = 75.00
+cache_write_per_mtok = 18.75
+cache_read_per_mtok  = 1.50
+
+[models.claude-opus-4-20250514]
+input_per_mtok     = 15.00
+output_per_mtok    = 75.00
+cache_write_per_mtok = 18.75
+cache_read_per_mtok  = 1.50
+
+# --- Sonnet 4 / 4.5 / 4.6: $3 / $15 ---
 
 [models.claude-sonnet-4-6]
 input_per_mtok     = 3.00
@@ -22,18 +98,44 @@ output_per_mtok    = 15.00
 cache_write_per_mtok = 3.75
 cache_read_per_mtok  = 0.30
 
-[models.claude-haiku-4-5-20251001]
-input_per_mtok     = 0.80
-output_per_mtok    = 4.00
-cache_write_per_mtok = 1.00
-cache_read_per_mtok  = 0.08
-
-# Fable 5 pricing is not yet officially published; using Sonnet-equivalent as a placeholder.
-[models.claude-fable-5]
+[models.claude-sonnet-4-5]
 input_per_mtok     = 3.00
 output_per_mtok    = 15.00
 cache_write_per_mtok = 3.75
 cache_read_per_mtok  = 0.30
+
+[models.claude-sonnet-4-5-20250929]
+input_per_mtok     = 3.00
+output_per_mtok    = 15.00
+cache_write_per_mtok = 3.75
+cache_read_per_mtok  = 0.30
+
+# Sonnet 4 (deprecated).
+[models.claude-sonnet-4-0]
+input_per_mtok     = 3.00
+output_per_mtok    = 15.00
+cache_write_per_mtok = 3.75
+cache_read_per_mtok  = 0.30
+
+[models.claude-sonnet-4-20250514]
+input_per_mtok     = 3.00
+output_per_mtok    = 15.00
+cache_write_per_mtok = 3.75
+cache_read_per_mtok  = 0.30
+
+# --- Haiku 4.5: $1 / $5 ---
+
+[models.claude-haiku-4-5]
+input_per_mtok     = 1.00
+output_per_mtok    = 5.00
+cache_write_per_mtok = 1.25
+cache_read_per_mtok  = 0.10
+
+[models.claude-haiku-4-5-20251001]
+input_per_mtok     = 1.00
+output_per_mtok    = 5.00
+cache_write_per_mtok = 1.25
+cache_read_per_mtok  = 0.10
 
 # Error responses use the <synthetic> model name and carry zero tokens — no cost.
 [models."<synthetic>"]
@@ -42,7 +144,7 @@ output_per_mtok    = 0.00
 cache_write_per_mtok = 0.00
 cache_read_per_mtok  = 0.00
 
-# Fallback applied to any model not listed above.
+# Fallback applied to any model not listed above (Sonnet-equivalent).
 # Set all values to 0.0 to suppress cost for unknown models.
 [unknown_model_fallback]
 input_per_mtok     = 3.00

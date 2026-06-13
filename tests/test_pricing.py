@@ -39,10 +39,10 @@ class TestPricingTableCostComputation:
             cache_read_tokens=400,
         )
         expected = (
-            500 * 0.80 / 1e6
-            + 100 * 4.00 / 1e6
-            + 0 * 1.00 / 1e6
-            + 400 * 0.08 / 1e6
+            500 * 1.00 / 1e6
+            + 100 * 5.00 / 1e6
+            + 0 * 1.25 / 1e6
+            + 400 * 0.10 / 1e6
         )
         assert cost == pytest.approx(expected, rel=1e-9)
 
@@ -57,10 +57,10 @@ class TestPricingTableCostComputation:
             cache_read_tokens=4000,
         )
         expected = (
-            5000 * 3.00 / 1e6
-            + 1000 * 15.00 / 1e6
-            + 2500 * 3.75 / 1e6
-            + 4000 * 0.30 / 1e6
+            5000 * 10.00 / 1e6
+            + 1000 * 50.00 / 1e6
+            + 2500 * 12.50 / 1e6
+            + 4000 * 1.00 / 1e6
         )
         assert cost == pytest.approx(expected, rel=1e-9)
 
@@ -123,10 +123,10 @@ class TestPricingTableGetPrices:
         pricing = PricingTable()
         prices = pricing.get_prices("claude-haiku-4-5-20251001")
         assert prices is not None
-        assert prices["input"] == 0.80
-        assert prices["output"] == 4.00
-        assert prices["cache_write"] == 1.00
-        assert prices["cache_read"] == 0.08
+        assert prices["input"] == 1.00
+        assert prices["output"] == 5.00
+        assert prices["cache_write"] == 1.25
+        assert prices["cache_read"] == 0.10
 
     def test_get_prices_unknown_model(self):
         """get_prices returns fallback for unknown model."""

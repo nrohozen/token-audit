@@ -226,10 +226,10 @@ class TestAggByModel:
         haiku = next(r for r in rows if r.key == "claude-haiku-4-5-20251001")
         assert haiku.cost is not None
         expected = (
-            1300 * 0.80 / 1e6
-            + 250 * 4.00 / 1e6
-            + 0 * 1.00 / 1e6
-            + 1000 * 0.08 / 1e6
+            1300 * 1.00 / 1e6
+            + 250 * 5.00 / 1e6
+            + 0 * 1.25 / 1e6
+            + 1000 * 0.10 / 1e6
         )
         assert haiku.cost == pytest.approx(expected, rel=1e-9)
 
