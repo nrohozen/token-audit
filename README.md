@@ -151,3 +151,7 @@ python3 -m pytest tests/ -v
 ```
 
 Fixtures in `tests/fixtures/` are entirely synthetic — no real transcript data.
+
+## License
+
+[MIT](LICENSE).

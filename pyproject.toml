@@ -7,6 +7,9 @@ name = "token-audit"
 version = "0.1.0"
 description = "Report Claude Code token usage from local session transcripts"
 requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "nrohozen" }]
+classifiers = ["License :: OSI Approved :: MIT License"]
 dependencies = []
 
 [project.scripts]
