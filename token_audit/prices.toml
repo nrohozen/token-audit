@@ -2,7 +2,7 @@
 # Prices are in USD per million tokens.
 # Update these values when Anthropic changes pricing.
 # Source: https://www.anthropic.com/pricing
-# Last updated: 2026-06-13
+# Last updated: 2026-07-02
 #
 # cache_write_per_mtok uses the 5-minute cache-write rate (the default
 # ephemeral TTL). The 1-hour write rate is higher but isn't represented here,
@@ -90,7 +90,15 @@ output_per_mtok    = 75.00
 cache_write_per_mtok = 18.75
 cache_read_per_mtok  = 1.50
 
-# --- Sonnet 4 / 4.5 / 4.6: $3 / $15 ---
+# --- Sonnet 4 / 4.5 / 4.6 and Sonnet 5: $3 / $15 ---
+# Sonnet 5 has an introductory discount of $2 / $10 per MTok through
+# 2026-08-31; the standard $3 / $15 sticker price is used here.
+
+[models.claude-sonnet-5]
+input_per_mtok     = 3.00
+output_per_mtok    = 15.00
+cache_write_per_mtok = 3.75
+cache_read_per_mtok  = 0.30
 
 [models.claude-sonnet-4-6]
 input_per_mtok     = 3.00
