@@ -37,6 +37,8 @@ token-audit [OPTIONS] COMMAND
 | `by-project` | Breakdown by project directory           |
 | `by-model`   | Breakdown by model                       |
 | `by-day`     | Breakdown by calendar day                |
+| `wrapped`    | Generate a "Claude Code Wrapped" HTML page (see [Wrapped](#claude-code-wrapped)) |
+| `achievements` | Gamified achievements from your usage (see [Achievements](#achievements)) |
 
 ### Global options
 
@@ -70,7 +72,47 @@ token-audit --prices ~/my-prices.toml summary
 
 # Show efficiency ratios per model instead of token counts
 token-audit --efficiency by-model
+
+# Generate your "Claude Code Wrapped" page
+token-audit wrapped -o my-wrapped.html
 ```
+
+## Claude Code Wrapped
+
+`token-audit wrapped` turns your transcripts into a Spotify-Wrapped-style
+year-in-review page:
+
+```bash
+token-audit wrapped                    # writes ./wrapped.html
+token-audit wrapped -o report.html     # custom output path
+token-audit --since 2026-01-01 wrapped # limit the period, as usual
+```
+
+The page includes headline totals, tokens served from the prompt cache (and
+the estimated dollars that saved), top projects, model mix, your most-used
+tools with a matching "tool personality", time-of-day habits, your longest
+session, and a few awards you did not ask for.
+
+It is a single self-contained HTML file — inline CSS/JS, no external assets,
+no network requests — so it opens straight from disk and stays as local as the
+rest of the tool. Time-of-day stats use your local timezone.
+
+## Achievements
+
+`token-audit achievements` scores your transcripts against a set of
+bronze/silver/gold achievements — night-owl sessions, streaks, lifetime
+tokens, cache mastery, and more:
+
+```bash
+token-audit achievements
+token-audit --since 2026-01-01 achievements   # filters apply as usual
+```
+
+Unlocked achievements show the tier medal, the stat that earned it, and a
+progress bar toward the next tier; locked ones sit at the bottom with a hint.
+Output is plain text (emoji, no ANSI colors). Time-of-day and per-day stats
+use your local timezone. The Cache Whisperer achievement only appears when
+your transcripts contain prompt-cache token counts.
 
 ## Efficiency metrics
 
@@ -140,7 +182,7 @@ Set `unknown_model_fallback` values to `0.0` to suppress cost estimation for mod
 
 ## Data source
 
-Transcripts are stored as JSONL files under `~/.claude/projects/<project>/`. Each line is a JSON object. The tool reads only lines with `"type": "assistant"` and looks for the `message.usage` and `message.model` fields. All other content is ignored.
+Transcripts are stored as JSONL files under `~/.claude/projects/<project>/`. Each line is a JSON object. The tool reads only lines with `"type": "assistant"` and looks for the `message.usage` and `message.model` fields, plus `cwd` and the names of `tool_use` content blocks (used by `wrapped`). All other content is ignored.
 
 Malformed lines are skipped and counted; the total is reported at the end of each run.
 

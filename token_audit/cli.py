@@ -6,6 +6,11 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+from .achievements import (
+    compute_achievement_stats,
+    evaluate_achievements,
+    format_achievements,
+)
 from .models import ScanResult
 from .pricing import PricingTable
 from .report import (
@@ -20,6 +25,7 @@ from .report import (
     format_table,
 )
 from .scanner import scan_directory
+from .wrapped import compute_wrapped_stats, render_wrapped_html
 
 _DEFAULT_DATA_DIR = Path.home() / ".claude" / "projects"
 
@@ -104,6 +110,20 @@ def _build_parser() -> argparse.ArgumentParser:
     sub.add_parser("by-project", help="Breakdown by project directory")
     sub.add_parser("by-model", help="Breakdown by model")
     sub.add_parser("by-day", help="Breakdown by calendar day")
+    sub.add_parser("achievements", help="Gamified achievements from your usage")
+
+    wrapped = sub.add_parser(
+        "wrapped",
+        help="Generate a 'Claude Code Wrapped' HTML page",
+    )
+    wrapped.add_argument(
+        "-o",
+        "--output",
+        metavar="PATH",
+        type=Path,
+        default=Path("wrapped.html"),
+        help="Output HTML file (default: wrapped.html)",
+    )
 
     return parser
 
@@ -169,10 +189,29 @@ def main(argv: Optional[list[str]] = None) -> int:
         else:
             print(format_json(rows, "date"))
 
+    elif args.command == "achievements":
+        stats = compute_achievement_stats(result)
+        print(format_achievements(evaluate_achievements(stats)))
+        if result.skipped_lines:
+            print(f"\nWarning: {result.skipped_lines} line(s) skipped")
+
+    elif args.command == "wrapped":
+        stats = compute_wrapped_stats(result, pricing)
+        args.output.write_text(render_wrapped_html(stats), encoding="utf-8")
+        print(args.output)
+        if result.skipped_lines:
+            print(
+                f"Warning: {result.skipped_lines} line(s) skipped", file=sys.stderr
+            )
+
     return 0
 
 
 def entrypoint() -> None:
+    # Windows consoles often default to a legacy codepage that can't
+    # encode emoji; degrade gracefully instead of crashing.
+    if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.exit(main())
 
 

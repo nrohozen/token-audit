@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 
@@ -13,6 +13,8 @@ class TokenRecord:
     output_tokens: int = 0
     cache_creation_tokens: int = 0
     cache_read_tokens: int = 0
+    cwd: str = ""
+    tool_names: list = field(default_factory=list)
 
     @property
     def date(self):

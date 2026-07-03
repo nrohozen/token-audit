@@ -50,6 +50,19 @@ def scan_file(path: Path, project: str) -> tuple[list[TokenRecord], int]:
                     skipped += 1
                     continue
 
+                tool_names: list[str] = []
+                content = message.get("content")
+                if isinstance(content, list):
+                    for block in content:
+                        if isinstance(block, dict) and block.get("type") == "tool_use":
+                            name = block.get("name")
+                            if isinstance(name, str) and name:
+                                tool_names.append(name)
+
+                cwd = obj.get("cwd")
+                if not isinstance(cwd, str):
+                    cwd = ""
+
                 records.append(
                     TokenRecord(
                         project=project,
@@ -65,6 +78,8 @@ def scan_file(path: Path, project: str) -> tuple[list[TokenRecord], int]:
                         cache_read_tokens=int(
                             usage.get("cache_read_input_tokens") or 0
                         ),
+                        cwd=cwd,
+                        tool_names=tool_names,
                     )
                 )
     except OSError:
